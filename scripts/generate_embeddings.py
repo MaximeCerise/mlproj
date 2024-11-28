@@ -1,12 +1,12 @@
 import torch
-from torchvision import models, transforms
+from torchvision import transforms
 from torchvision.datasets import CIFAR10
 from torch.utils.data import DataLoader
 import pandas as pd
+from torchvision.models import resnet50, ResNet50_Weights
+import json
 
 # Charger ResNet préentraîné
-from torchvision.models import resnet50, ResNet50_Weights
-
 weights = ResNet50_Weights.DEFAULT
 resnet = resnet50(weights=weights)
 resnet.eval()
@@ -23,7 +23,7 @@ transform = transforms.Compose([
 ])
 
 # Charger CIFAR-10
-dataset = CIFAR10(root="./data", train=True, transform=transform, download=False)
+dataset = CIFAR10(root="data", train=True, transform=transform, download=True)
 dataloader = DataLoader(dataset, batch_size=32, shuffle=False)
 
 embeddings = []
@@ -34,13 +34,16 @@ with torch.no_grad():
     for images, targets in dataloader:
         images = images.to(device)  # Envoie les images sur le GPU
         features = resnet(images)
-        embeddings.append(features.cpu().numpy())  # Récupère les résultats sur le CPU
+        embeddings.extend(features.cpu().numpy().tolist())  # Convertir en liste Python
         labels.extend(targets.numpy())
 
+# Convertir les données en DataFrame
+df = pd.DataFrame({
+    'embedding': [json.dumps(embedding) for embedding in embeddings],  # Sérialiser les embeddings en JSON
+    'target': labels
+})
+
 # Sauvegarder dans un fichier CSV
-embeddings_flat = [item for sublist in embeddings for item in sublist]  # Aplatir la liste
-df = pd.DataFrame(embeddings_flat)
-df['label'] = labels
-df.to_csv("../data/ref_data.csv", index=False)
+df.to_csv("data/cifar10_emb.csv", index=False)
 
 print("Embeddings générés et sauvegardés dans ML_deployement/data/ref_data.csv")

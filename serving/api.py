@@ -2,6 +2,7 @@ from fastapi import FastAPI, UploadFile, File
 import pandas as pd
 import joblib
 from PIL import Image
+from narwhals import DataFrame
 from torchvision import transforms
 import numpy as np
 import torch
@@ -22,7 +23,7 @@ CLASS_NAMES = {
 }
 
 # Charger le modèle et le scaler
-model = joblib.load("../artifacts/model.pkl")
+model = joblib.load("artifacts/model.pkl")
 
 # Transformation pour les images (comme pour ResNet)
 transform = transforms.Compose([
@@ -37,7 +38,7 @@ from datetime import datetime
 import os
 
 # Chemin vers prod_data.csv
-PROD_DATA_PATH = "../data/prod_data.csv"
+PROD_DATA_PATH = "data/prod_data.csv"
 
 @app.post("/predict")
 async def predict(file: UploadFile = File(...)):
@@ -59,20 +60,18 @@ async def predict(file: UploadFile = File(...)):
     predicted_class_name = CLASS_NAMES[predicted_class_id]
 
     # Sauvegarder la prédiction dans prod_data.csv
-    data_to_save = {
-        "timestamp": [datetime.now().isoformat()],
-        "embedding": [embedding.tolist()],
-        "predicted_class_id": [int(predicted_class_id)],
-        "predicted_class_name": [predicted_class_name]
-    }
-
     # Convertir en DataFrame et append au fichier
+    data_to_save = {
+        'embedding': embedding.tolist(),
+        'target': -1,
+        'prediction': predicted_class_id
+    }
     df = pd.DataFrame(data_to_save)
+
     if not os.path.exists(PROD_DATA_PATH):  # Créer le fichier s'il n'existe pas
         df.to_csv(PROD_DATA_PATH, index=False)
     else:
         df.to_csv(PROD_DATA_PATH, mode="a", header=False, index=False)
-
     return {
         "predicted_class_id": int(predicted_class_id),
         "predicted_class_name": predicted_class_name

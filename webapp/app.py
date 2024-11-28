@@ -28,3 +28,6 @@ if uploaded_file is not None:
             st.success(f"Classe prédite : {predicted_class_name} (ID : {predicted_class_id})")
         else:
             st.error("Erreur lors de l'appel à l'API.")
+
+    if st.button("Feedback"):
+        pass
