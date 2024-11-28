@@ -1,4 +1,4 @@
-from fastapi import FastAPI, UploadFile, File
+from fastapi import FastAPI, UploadFile, File, Form
 import pandas as pd
 import joblib
 from PIL import Image
@@ -67,7 +67,7 @@ async def predict(file: UploadFile = File(...)):
 
 # Endpoint de feedback
 @app.post("/feedback")
-async def feedback(file: UploadFile = File(...), true_label: int = 0):
+async def feedback(file: UploadFile = File(...), target: int = Form(...)):
     # Charger l'image
     image = Image.open(file.file).convert("RGB")
     image_tensor = transform(image).unsqueeze(0)  # Préparer l'image
@@ -89,7 +89,7 @@ async def feedback(file: UploadFile = File(...), true_label: int = 0):
     # Convertir en DataFrame et append au fichier
     data_to_save = {
         'embedding': embedding.tolist(),
-        'target': true_label,
+        'target': [target],
         'prediction': predicted_class_id
     }
 
