@@ -59,13 +59,40 @@ async def predict(file: UploadFile = File(...)):
     predicted_class_id = model.predict(embedding)[0]
     predicted_class_name = CLASS_NAMES[predicted_class_id]
 
+    return {
+        "predicted_class_id": int(predicted_class_id),
+        "predicted_class_name": predicted_class_name
+    }
+
+
+# Endpoint de feedback
+@app.post("/feedback")
+async def feedback(file: UploadFile = File(...), true_label: int = 0):
+    # Charger l'image
+    image = Image.open(file.file).convert("RGB")
+    image_tensor = transform(image).unsqueeze(0)  # Préparer l'image
+
+    # Charger ResNet pour les embeddings
+    from torchvision.models import resnet50, ResNet50_Weights
+    weights = ResNet50_Weights.DEFAULT
+    resnet = resnet50(weights=weights).eval()
+
+    # Générer l'embedding
+    with torch.no_grad():
+        embedding = resnet(image_tensor).numpy()
+
+    # Prédire la classe
+    predicted_class_id = model.predict(embedding)[0]
+    predicted_class_name = CLASS_NAMES[predicted_class_id]
+
     # Sauvegarder la prédiction dans prod_data.csv
     # Convertir en DataFrame et append au fichier
     data_to_save = {
         'embedding': embedding.tolist(),
-        'target': -1,
+        'target': true_label,
         'prediction': predicted_class_id
     }
+
     df = pd.DataFrame(data_to_save)
 
     if not os.path.exists(PROD_DATA_PATH):  # Créer le fichier s'il n'existe pas
@@ -76,22 +103,5 @@ async def predict(file: UploadFile = File(...)):
         "predicted_class_id": int(predicted_class_id),
         "predicted_class_name": predicted_class_name
     }
-
-# Endpoint de feedback
-@app.post("/feedback")
-async def feedback(file: UploadFile = File(...), true_label: int = 0):
-    # Charger l'image et générer l'embedding
-    image = Image.open(file.file).convert("RGB")
-    image_tensor = transform(image).unsqueeze(0)
-    from torchvision.models import resnet50, ResNet50_Weights
-    weights = ResNet50_Weights.DEFAULT
-    resnet = resnet50(weights=weights).eval()
-    with torch.no_grad():
-        embedding = resnet(image_tensor).numpy()
-
-    # Ajouter au dataset de production
-    prod_data_path = "../data/prod_data.csv"
-    new_data = pd.DataFrame([np.append(embedding, true_label)])
-    new_data.to_csv(prod_data_path, mode="a", header=False, index=False)
 
     return {"message": "Feedback enregistré"}
