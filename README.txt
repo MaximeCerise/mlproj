@@ -26,3 +26,4 @@ uvicorn serving.api:app --reload --host 0.0.0.0 --port 8080
 weighted avg       0.86      0.86      0.86     10000
 
 
+Pour le reporting il est nécessaire d'avoir au moins toutes le classes dans prod_data.csv
