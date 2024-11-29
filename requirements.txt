@@ -10,3 +10,5 @@ pandas
 pillow
 scikit-learn
 python-multipart
+litestar
+evidently

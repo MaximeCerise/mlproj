@@ -17,7 +17,7 @@ uploaded_file = st.file_uploader("Choisissez une image", type=["jpg", "png", "jp
 if uploaded_file is not None:
     # Afficher l'image téléchargée
     image = Image.open(uploaded_file)
-    st.image(image, caption="Image téléchargée", use_column_width=True)
+    st.image(image, caption="Image téléchargée", use_container_width=True)
 
     # Bouton pour envoyer la prédiction
     if st.button("Obtenir une prédiction"):

@@ -1,0 +1,4 @@
+data/cifar-10-batches-py
+data/cifar10_emb.csv
+data/cifar-10-python.tar.gz
+.venv/
