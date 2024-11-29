@@ -26,4 +26,6 @@ jobs:
     # Step 3: Deploy Docker container locally
     - name: Deploy Docker container
       run: |
-        docker run -d -p 80:80 --name my-app my-app:latest
+        docker run -d -p 8080:8080 -p 8501:8501 -p 8502:8502 --name my-app my-app:latest "python run_app.py"
+  
+
