@@ -8,9 +8,6 @@ __pycache__/
 env/
 venv/
 
-# Artifacts
-
-
 # Docker
 *.log
 *.pid
@@ -23,15 +20,8 @@ venv/
 .idea/
 .vscode/
 
-# Data
-data/*.csv
 
-*.jpg
 .DS_Store
-
-# Data
-data/*
-transfer_learning/hymenoptera_data/*
 
 # Torch model
 *.pt
@@ -276,3 +266,9 @@ fabric.properties
 .idea/caches/build_file_checksums.ser
 
 .idea
+
+data/cifar-10-batches-py
+data/cifar10_emb.csv
+data/cifar-10-python.tar.gz
+.venv/
+artifacts/*
