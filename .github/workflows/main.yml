@@ -39,4 +39,5 @@ jobs:
       # Step 5: Launch service inside the container
       - name: Launch service
         run: |
-          docker exec -it proj /bin/bash -c "source pyenv/bin/activate && make run"
+          docker exec proj /bin/bash -c "source pyenv/bin/activate && make run"
+          
