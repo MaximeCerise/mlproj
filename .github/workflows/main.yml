@@ -17,6 +17,15 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
+    steps:
+        # Step 1: Set up cache directory for Docker
+        - name: Set up Docker layer cache
+          uses: actions/cache@v3
+          with:
+            path: /tmp/.buildx-cache
+            key: ${{ runner.os }}-docker-${{ github.sha }}
+            restore-keys: |
+              ${{ runner.os }}-docker-
     
     - name: Build Docker image
       run: |
@@ -26,6 +35,6 @@ jobs:
     # Step 3: Deploy Docker container locally
     - name: Deploy Docker container
       run: |
-        docker run -d -p 8080:8080 -p 8501:8501 -p 8502:8502 --name my-app my-app:latest "python run_app.py"
+        docker run -d -p 8080:8080 -p 8501:8501 -p 8502:8502 --name my-app my-app:latest 
   
 
