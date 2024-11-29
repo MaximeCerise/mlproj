@@ -20,7 +20,7 @@ jobs:
     
     - name: Build Docker image
       run: |
-        docker build -t my-app:${{ github.sha }} -f Dockerfile
+        docker build -t my-app:${{ github.sha }} -f Dockerfile .
         docker tag my-app:${{ github.sha }} my-app:latest
 
     # Step 3: Deploy Docker container locally
