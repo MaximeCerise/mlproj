@@ -1,12 +1,16 @@
 import streamlit as st
 import requests
 from PIL import Image
+import streamlit.components.v1 as components
 import io
 
+from litestar.plugins.flash import FlashConfig
+from sympy import false
+
 # Configuration de la page
+st.set_page_config(layout="wide")
 st.title("Prédiction d'images avec l'API ML")
 st.text("Téléchargez une image, recevez une prédiction et donnez un feedback.")
-
 # Téléchargement de l'image
 uploaded_file = st.file_uploader("Choisissez une image", type=["jpg", "png", "jpeg"])
 
@@ -43,3 +47,22 @@ if uploaded_file is not None:
             st.success("Feedback enregistré avec succès.")
         else:
             st.error("Erreur lors de l'envoi du feedback.")
+import subprocess
+# Bouton pour afficher le rapport
+if st.button("Afficher le rapport de production"):
+    # Exécuter le script de rapport
+    try:
+        subprocess.run(["python3", "reporting/report.py"], check=True)
+        st.success("Rapport généré avec succès !")
+    except subprocess.CalledProcessError as e:
+        st.error(f"Erreur lors de l'exécution du rapport : {str(e)}")
+    else:
+        # Charger et afficher le rapport
+        html_path = "webapp/evidently_report.html"
+        try:
+            with open(html_path, 'r', encoding='utf-8') as HtmlFile:
+                source_code = HtmlFile.read()
+            # Intégrer le fichier HTML
+            components.html(source_code, height=1200, scrolling=True)
+        except FileNotFoundError:
+            st.error(f"Fichier HTML introuvable : {html_path}")

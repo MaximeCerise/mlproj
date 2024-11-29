@@ -18,5 +18,5 @@ report = Report(metrics=[
 report.run(reference_data=training_data, current_data=production_data)
 
 # Sauvegarder le rapport en HTML
-report.save_html("evidently_report.html")
+report.save_html("webapp/evidently_report.html")
 print("Rapport Evidently généré : evidently_report.html")

@@ -1,0 +1,12 @@
+streamlit
+requests
+pillow
+fastapi
+uvicorn
+torch
+torchvision
+joblib
+pandas
+pillow
+scikit-learn
+python-multipart
