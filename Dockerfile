@@ -32,5 +32,7 @@ COPY . /app/
 RUN unzip model.pkl.zip -d temp_dir && mkdir -p artifacts && cp -r temp_dir/* artifacts/ && rm -rf temp_dir
 
 RUN cd artifacts && ls
+
+RUN export STREAMLIT_BROWSER_GATHERUSAGESTATS=false
 # Activer l'environnement virtuel par défaut et exécuter une commande
 CMD ["sh", "-c", "tail -f /dev/null"]
