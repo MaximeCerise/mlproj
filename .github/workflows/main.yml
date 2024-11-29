@@ -28,13 +28,15 @@ jobs:
     
     - name: Build Docker image
       run: |
-        docker build -t my-app:${{ github.sha }} -f Dockerfile .
-        docker tag my-app:${{ github.sha }} my-app:latest
+        docker build --name proj -d my-app:${{ github.sha }} -f Dockerfile .
+      
 
     # Step 3: Deploy Docker container locally
-    - name: Deploy Docker container
+    - name: launch docker image
       run: |
-        docker run -d -p 8080:8080 -p 8501:8501 -p 8502:8502 --name my-app my-app:latest 
-
+        docker run --name proj -d -p 8080:8080 -p 8501:8501 -p 8502:8502 my-app    
+    - name: Launch serv
+      run: |
+        docker exec -it proj  /bin/bash -c "source pyenv/bin/activate && make run"     
   
 

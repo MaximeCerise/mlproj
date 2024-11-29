@@ -29,4 +29,4 @@ RUN /app/pyenv/bin/pip install -r /app/requirements.txt
 COPY . /app/
 
 # Activer l'environnement virtuel par défaut et exécuter une commande
-CMD ["/bin/bash", "-c", "source /app/pyenv/bin/activate && exec bash"]
+CMD ["sh", "-c", "tail -f /dev/null"]
