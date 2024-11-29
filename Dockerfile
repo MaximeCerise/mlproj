@@ -9,7 +9,8 @@ RUN apt-get update && apt-get install -y \
     python3 \
     python3-pip \
     python3-venv \
-    curl && \
+    curl \
+    unzip && \
     rm -rf /var/lib/apt/lists/*
 
 RUN apt-get install make
@@ -28,5 +29,8 @@ RUN /app/pyenv/bin/pip install -r /app/requirements.txt
 # Copier le reste de l'application dans le conteneur
 COPY . /app/
 
+RUN unzip model.pkl.zip -d temp_dir && mkdir -p artifacts && cp -r temp_dir/* artifacts/ && rm -rf temp_dir
+
+RUN cd artifacts && ls
 # Activer l'environnement virtuel par défaut et exécuter une commande
 CMD ["sh", "-c", "tail -f /dev/null"]

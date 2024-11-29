@@ -9,8 +9,7 @@ env/
 venv/
 
 # Artifacts
-artifacts/
-*.pkl
+
 
 # Docker
 *.log
