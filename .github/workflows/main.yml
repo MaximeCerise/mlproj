@@ -13,31 +13,30 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-    # Step 1: Checkout the repository
-    - name: Checkout code
-      uses: actions/checkout@v3
+      # Step 1: Checkout the repository
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-    steps:
-        # Step 1: Set up cache directory for Docker
-        - name: Set up Docker layer cache
-          uses: actions/cache@v3
-          with:
-            path: /tmp/.buildx-cache
-            key: ${{ runner.os }}-docker-${{ github.sha }}
-            restore-keys: |
-              ${{ runner.os }}-docker-
-    
-    - name: Build Docker image
-      run: |
-        docker build --name proj -d my-app:${{ github.sha }} -f Dockerfile .
+      # Step 2: Set up cache directory for Docker
+      - name: Set up Docker layer cache
+        uses: actions/cache@v3
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-docker-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-docker-
+
+      # Step 3: Build Docker image
+      - name: Build Docker image
+        run: |
+          docker build -t my-app:${{ github.sha }} -f Dockerfile .
+
+      # Step 4: Deploy Docker container locally
+      - name: Launch Docker container
+        run: |
+          docker run --name proj -d -p 8080:8080 -p 8501:8501 -p 8502:8502 my-app:${{ github.sha }}
       
-
-    # Step 3: Deploy Docker container locally
-    - name: launch docker image
-      run: |
-        docker run --name proj -d -p 8080:8080 -p 8501:8501 -p 8502:8502 my-app    
-    - name: Launch serv
-      run: |
-        docker exec -it proj  /bin/bash -c "source pyenv/bin/activate && make run"     
-  
-
+      # Step 5: Launch service inside the container
+      - name: Launch service
+        run: |
+          docker exec -it proj /bin/bash -c "source pyenv/bin/activate && make run"
