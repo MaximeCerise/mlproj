@@ -69,3 +69,5 @@ Se connecter à l'application : <a>http://localhost:8501/ </a>
 ***
 <h2>Dépendances</h2>
 Les dépendances sont dans le fichier <b>requirements.txt</b>
+
+<b>PS : Ne pas oublier de bien fermer le container </b>
