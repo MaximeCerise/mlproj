@@ -66,12 +66,6 @@ Se connecter à l'application : <a>http://localhost:8501/ </a>
 <code>launch.bat</code>
 
 Se connecter à l'application : <a>http://localhost:8501/ </a>
-
+***
 <h2>Dépendances</h2>
 Les dépendances sont dans le fichier <b>requirements.txt</b>
-
-docker build -t my-app -f Dockerfile .
-docker run --name proj -d -p 8080:8080 -p 8501:8501 -p 8502:8502 maxcerise/mlproj:latest
-docker exec proj /bin/bash -c "source pyenv/bin/activate && make run"
-      
-docker build -t my-app -f Dockerfile .
