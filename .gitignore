@@ -270,5 +270,7 @@ fabric.properties
 data/cifar-10-batches-py
 data/cifar10_emb.csv
 data/cifar-10-python.tar.gz
+data/ref_data.csv
 .venv/
 artifacts/*
+.artifacts
