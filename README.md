@@ -55,7 +55,7 @@ Clone le repo :
 
 <code>cd mlproj</code>
 
-<code>chmod +x launch_macos.sh</code>
+<code>chmod +x launch.sh</code>
 
 Se connecter à l'application : <a>http://localhost:8501/ </a>
 
