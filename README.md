@@ -1,4 +1,4 @@
-<h1> Projet de Machine Learning dans le cadre du cours <em> Machine Learning UCBL</em></h1>
+<h1> Projet de Mise en production dans le cadre du cours <em> Machine Learning UCBL</em></h1>
 <h4>Par MOREAU Maxime, ECL 2022</h4>
 
 <h2>Présentation de l’application</h2>
